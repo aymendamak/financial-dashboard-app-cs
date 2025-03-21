@@ -1,0 +1,82 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div
+    class="flex flex-row gap-4 filter-container w-full items-center pb-4 p-1"
+  >
+    <div class="flex w-[80%] gap-4">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend text-black text-lg">Category</legend>
+        <select
+          class="select select-lg w-full max-w-xs bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          (change)="filterByCategory($event)"
+        >
+          <option value="" selected>All Categories</option>
+          <ng-container
+            *ngFor="let category of uniqueCategories; let i = index"
+          >
+            <option [value]="category">{{ category }}</option>
+          </ng-container>
+        </select>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend text-black text-lg">Type</legend>
+        <select
+          class="select select-lg w-full max-w-xs bg-white text-gray-700 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          (change)="filterByType($event)"
+        >
+          <option value="">All Types</option>
+          <option value="Income">Income</option>
+          <option value="Expense">Expense</option>
+        </select>
+      </fieldset>
+    </div>
+    <div class="flex flex-row justify-end w-[20%]">
+      <button class="btn btn-outline btn-primary btn-lg" (click)="openModal()">
+        New Transaction
+      </button>
+    </div>
+  </div>
+
+  <table class="w-full text-sm text-left text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <tr>
+        <th
+          *ngFor="let column of displayedColumns"
+          scope="col"
+          class="px-6 py-3"
+        >
+          {{ column }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let transaction of filteredTransactions"
+        class="bg-white border-b hover:bg-gray-50"
+      >
+        <td class="px-6 py-4">{{ transaction.date | date : "shortDate" }}</td>
+        <td class="px-6 py-4">{{ transaction.description }}</td>
+        <td
+          [ngClass]="{
+            'text-green-600': transaction.amount > 0,
+            'text-red-600': transaction.amount < 0
+          }"
+          class="px-6 py-4"
+        >
+          {{ transaction.amount | currency }}
+        </td>
+        <td class="px-6 py-4">{{ transaction.category }}</td>
+        <td class="px-6 py-4">{{ transaction.type }}</td>
+        <td class="px-6 py-4 text-center">
+          <button
+            mat-icon-button
+            (click)="openTransactionModal(transaction)"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-2 shadow-sm transition duration-200 ease-in-out justify-center items-center"
+          >
+            <mat-icon class="text-lg">visibility</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
