@@ -11,7 +11,7 @@
         >
           <option value="" selected>All Categories</option>
           <ng-container
-            *ngFor="let category of uniqueCategories; let i = index"
+            *ngFor="let category of uniqueCategories(); let i = index"
           >
             <option [value]="category">{{ category }}</option>
           </ng-container>
@@ -51,15 +51,15 @@
     </thead>
     <tbody>
       <tr
-        *ngFor="let transaction of filteredTransactions"
+        *ngFor="let transaction of filteredTransactions()"
         class="bg-white border-b hover:bg-gray-50"
       >
         <td class="px-6 py-4">{{ transaction.date | date : "shortDate" }}</td>
         <td class="px-6 py-4">{{ transaction.description }}</td>
         <td
           [ngClass]="{
-            'text-green-600': transaction.amount > 0,
-            'text-red-600': transaction.amount < 0
+            'text-green-600': transaction.type.toLowerCase() === 'income',
+            'text-red-600': transaction.type.toLowerCase() === 'expense'
           }"
           class="px-6 py-4"
         >

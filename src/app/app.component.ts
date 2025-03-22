@@ -7,7 +7,6 @@ import { DashboardComponent } from './components/my-dashboard/my-dashboard.compo
   selector: 'app-root',
   imports: [MatToolbarModule, MatCardModule, DashboardComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'financial-dashboard-app-cs';
