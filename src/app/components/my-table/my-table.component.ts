@@ -2,6 +2,7 @@
 import {
   Component,
   computed,
+  inject,
   Input,
   OnInit,
   signal,
@@ -35,6 +36,7 @@ import { TransactionService } from '../../services/transaction.service';
 })
 export class MyTableComponent {
   @Input() transactions!: Signal<Transaction[]>;
+  private transactionService = inject(TransactionService);
 
   selectedCategory = signal<string>('');
   selectedType = signal<string>('');
@@ -89,6 +91,7 @@ export class MyTableComponent {
   }
 
   openTransactionModal(transaction: Transaction) {
-    console.log('Open transaction modal for:', transaction);
+    this.modalService.openModal('details_transaction_modal');
+    this.transactionService.setCurrentTransaction(transaction);
   }
 }

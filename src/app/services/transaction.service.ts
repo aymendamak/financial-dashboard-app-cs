@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Transaction, TransactionCreateError } from '../models/transaction';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { ModalService } from './modal.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +17,10 @@ export class TransactionService {
   private errorSignal = signal<any>([]);
   public errors = this.errorSignal.asReadonly();
 
-  // Computed signal to extract errors
-  // public errorMessages = computed(() => this.errorSignal().errors);
+  private currentTransactionSignal = signal<Transaction | null>(null);
+  public currentTransaction = this.currentTransactionSignal.asReadonly();
+
+  private modalService = inject(ModalService);
 
   uniqueCategories = ['Food', 'Transport', 'Health', 'Entertainment'];
 
@@ -27,11 +30,14 @@ export class TransactionService {
     return this.uniqueCategories;
   }
 
+  setCurrentTransaction(transaction: Transaction): void {
+    this.currentTransactionSignal.set(transaction);
+  }
+
   getAllTransactions(): void {
     this.http.get(this.baseUrl + '/all').subscribe({
       next: (data: any) => {
         this.transactionSignal.set(data);
-        console.log('transactions', this.transactions());
       },
       error: (error) => {
         this.errorSignal.set(error);
@@ -63,9 +69,26 @@ export class TransactionService {
           },
           error: (error) => {
             this.errorSignal.set(error.error.errors);
-            console.log('Error adding new Transaction', this.errorSignal());
           },
         })
       );
+  }
+
+  deleteTransaction() {
+    const currentTransaction = this.currentTransactionSignal();
+    if (currentTransaction) {
+      this.http.delete(this.baseUrl + `/${currentTransaction.id}`).subscribe({
+        next: () => {
+          this.transactionSignal.update((transactions) =>
+            transactions.filter((t) => t.id !== currentTransaction.id)
+          );
+          this.currentTransactionSignal.set(null);
+          this.modalService.closeModal('details_transaction_modal');
+        },
+        error: (error) => {
+          this.errorSignal.set(error);
+        },
+      });
+    }
   }
 }

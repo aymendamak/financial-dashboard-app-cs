@@ -1,0 +1,78 @@
+<dialog id="details_transaction_modal" class="modal">
+  <div
+    class="modal-box w-11/12 max-w-5xl bg-gray-200 flex flex-col justify-center items-center gap-6 p-4 pt-6"
+  >
+    <h3 class="text-2xl font-extrabold text-indigo-600">
+      TRANSACTION'S DETAIL
+    </h3>
+    <label
+      class="input input-bordered text-black text-xl flex items-center gap-2 w-[80%] bg-white shadow-md"
+    >
+      <span class="material-symbols-outlined"> description </span>
+      <input
+        type="text"
+        class="grow"
+        placeholder="Description"
+        [value]="transaction()?.description"
+        readonly
+      />
+    </label>
+    <label
+      class="input input-bordered flex text-black text-xl items-center gap-2 w-[80%] bg-white shadow-md"
+    >
+      <span class="material-symbols-outlined"> calendar_month </span>
+      <input
+        type="date"
+        class="grow"
+        placeholder="Date"
+        [value]="transaction()?.date"
+        readonly
+      />
+    </label>
+
+    <div class="flex flex-row w-[80%] gap-2">
+      <div
+        class="input input-bordered text-black text-xl flex w-full gap-2 bg-white shadow-md"
+      >
+        <select
+          class="select select-bordered bg-white w-full"
+          formControlName="type"
+          readonly
+        >
+          <option value="INCOME" selected>INCOME</option>
+          <option value="EXPENSE">EXPENSE</option>
+        </select>
+      </div>
+      <div
+        class="input input-bordered text-black text-xl flex w-full gap-2 bg-white shadow-md"
+      ></div>
+    </div>
+    <label
+      class="input input-bordered flex text-black text-xl items-center gap-2 w-[80%] bg-white shadow-md"
+    >
+      <span class="material-symbols-outlined"> payments </span>
+      <input
+        type="number"
+        class="grow"
+        placeholder="Amount"
+        formControlName="amount"
+        readonly
+      />
+    </label>
+    <div class="modal-action flex flex-row justify-end w-[80%]">
+      <button
+        class="btn btn-ghost btn-lg border-none hover:bg-white text-black"
+        (click)="closeModal()"
+      >
+        CANCEL
+      </button>
+      <button
+        type="btn"
+        class="btn btn-lg border-none btn-error text-white"
+        (click)="deleteTransaction()"
+      >
+        DELETE
+      </button>
+    </div>
+  </div>
+</dialog>

@@ -5,14 +5,23 @@ import { CommonModule } from '@angular/common';
 import { ModalComponent } from '../modal/modal.component';
 import { TransactionService } from '../../services/transaction.service';
 import { Transaction } from '../../models/transaction';
+import { DetailsModalComponent } from '../details-modal/details-modal.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './my-dashboard.component.html',
-  imports: [MyCardComponent, MyTableComponent, CommonModule, ModalComponent],
+  imports: [
+    MyCardComponent,
+    MyTableComponent,
+    CommonModule,
+    ModalComponent,
+    DetailsModalComponent,
+  ],
 })
 export class DashboardComponent {
   transactionService = inject(TransactionService);
+  modalService = inject(ModalService);
   transactions = this.transactionService.transactions;
 
   financialMetrics = [
@@ -25,6 +34,5 @@ export class DashboardComponent {
 
   ngOnInit(): void {
     this.transactionService.getAllTransactions();
-    console.log('transactions', this.transactions);
   }
 }

@@ -42,25 +42,15 @@ export class ModalComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.createForm.value);
     if (this.createForm.valid) {
-      this.createForm.reset({
-        category: 'Food',
-        type: 'INCOME',
-        amount: '',
-        date: '',
-        description: '',
-      });
       const formValue = this.createForm.value;
-      console.log('formValue', formValue);
       const newTransaction: Transaction = {
         id: 1,
-        category: formValue.category || 'Food',
-        type: 'income',
-        amount: 100,
-        // amount: formValue.amount || 0,
+        category: formValue.category,
+        type: formValue.type,
+        amount: formValue.amount,
         date: new Date('2025-05-06'),
-        description: formValue.description || '',
+        description: formValue.description,
       };
       this.transactionService.addTransaction(newTransaction).subscribe({
         next: (response) => {
@@ -69,7 +59,15 @@ export class ModalComponent implements OnInit {
         error: (error) => {
           console.error('Error creating Transaction:', error);
         },
-        complete: () => {},
+        complete: () => {
+          this.createForm.reset({
+            category: 'Food',
+            type: 'INCOME',
+            amount: '',
+            date: '',
+            description: '',
+          });
+        },
       });
     }
   }
